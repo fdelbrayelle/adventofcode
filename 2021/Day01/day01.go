@@ -8,6 +8,10 @@ import (
 )
 
 func main() {
+	part1()
+}
+
+func part1() {
 	content, err := ioutil.ReadFile("input")
 	if err != nil {
 		fmt.Println("ioutil.ReadFile Err")
@@ -30,5 +34,9 @@ func main() {
 			increasedCount++
 		}
 	}
-	fmt.Println(increasedCount)
+	fmt.Println("Part 1 result is:", increasedCount)
+}
+
+func part2() {
+	// TODO
 }
