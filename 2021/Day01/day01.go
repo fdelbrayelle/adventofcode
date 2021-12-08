@@ -8,10 +8,6 @@ import (
 )
 
 func main() {
-	part1()
-}
-
-func part1() {
 	content, err := ioutil.ReadFile("input")
 	if err != nil {
 		fmt.Println("ioutil.ReadFile Err")
@@ -28,6 +24,11 @@ func part1() {
 		}
 		nums = append(nums, n)
 	}
+	part1(nums)
+	part2(nums)
+}
+
+func part1(nums []int) {
 	var increasedCount int
 	for i := 0; i < len(nums); i++ {
 		if i != 0 && nums[i-1] < nums[i] {
@@ -37,6 +38,16 @@ func part1() {
 	fmt.Println("Part 1 result is:", increasedCount)
 }
 
-func part2() {
-	// TODO
+func part2(nums []int) {
+	var increasedCount int
+	for i := 0; i < len(nums); i++ {
+		if i < len(nums)-3 {
+			sumA := nums[i] + nums[i+1] + nums[i+2]
+			sumB := nums[i+1] + nums[i+2] + nums[i+3]
+			if sumB > sumA {
+				increasedCount++
+			}
+		}
+	}
+	fmt.Println("Part 2 result is:", increasedCount)
 }
