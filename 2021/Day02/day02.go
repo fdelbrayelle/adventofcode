@@ -31,11 +31,11 @@ func part1(lines []string) {
 		}
 		switch rows[0] {
 		case "forward":
-			horizontalPosition = horizontalPosition + value
+			horizontalPosition += value
 		case "up":
-			depth = depth - value
+			depth -= value
 		case "down":
-			depth = depth + value
+			depth += value
 		}
 	}
 	fmt.Println("Part 1 result is:", horizontalPosition*depth)
@@ -56,12 +56,12 @@ func part2(lines []string) {
 		}
 		switch rows[0] {
 		case "forward":
-			horizontalPosition = horizontalPosition + value
-			depth = depth + aim*value
+			horizontalPosition += value
+			depth += aim * value
 		case "up":
-			aim = aim - value
+			aim -= value
 		case "down":
-			aim = aim + value
+			aim += value
 		}
 	}
 	fmt.Println("Part 2 result is:", horizontalPosition*depth)
