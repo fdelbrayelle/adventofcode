@@ -17,6 +17,7 @@ func main() {
 		fmt.Println("ioutil.ReadFile Err")
 	}
 	lines := strings.Split(string(content), "\n\n")
+	// FIXME: Convert numbers into a []int
 	numbers := strings.Split(lines[0], ",")
 	boards := makeBoards(lines)
 	checkBoards(boards, numbers)
@@ -52,6 +53,6 @@ func makeBoards(lines []string) []Board {
 }
 
 func checkBoards(boards []Board, numbers []string) []Board {
-	// FIXME
+	// FIXME: check boards with numbers
 	return nil
 }
