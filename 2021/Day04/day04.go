@@ -17,11 +17,12 @@ func main() {
 		fmt.Println("ioutil.ReadFile Err")
 	}
 	lines := strings.Split(string(content), "\n\n")
-	// numbers := strings.Split(lines[0], ",")
-	makeBoard(lines)
+	numbers := strings.Split(lines[0], ",")
+	boards := makeBoards(lines)
+	checkBoards(boards, numbers)
 }
 
-func makeBoard(lines []string) []Board {
+func makeBoards(lines []string) []Board {
 	lines = lines[1:]
 	var boards []Board
 	board := Board{}
@@ -48,4 +49,9 @@ func makeBoard(lines []string) []Board {
 		}
 	}
 	return boards
+}
+
+func checkBoards(boards []Board, numbers []string) []Board {
+	// FIXME
+	return nil
 }

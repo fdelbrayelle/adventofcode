@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestMakeBoard(t *testing.T) {
+func TestMakeBoards(t *testing.T) {
 	// Given
 	/*
 		17,11,37,7,89,48,99,28,56,55,57,27,83,59,53,72,6,87,33,82,13,23,35,40,71,47,78,2,39,4,51,1,67,31,79,69,15,73,80,22,92,95,91,43,26,97,36,34,12,96,86,52,66,94,61,76,64,77,85,98,42,68,84,63,60,30,65,19,54,58,24,20,25,75,93,16,18,44,14,88,45,10,9,3,70,74,81,90,46,38,21,49,29,50,0,5,8,32,62,41
@@ -41,7 +41,80 @@ func TestMakeBoard(t *testing.T) {
 	expectedBoards := []Board{board1, board2}
 
 	// When
-	var actualBoards []Board = makeBoard(lines)
+	var actualBoards []Board = makeBoards(lines)
+
+	// Then
+	if !reflect.DeepEqual(actualBoards, expectedBoards) {
+		t.Errorf("Boards are different:\nactual  : %d,\nexpected: %d",
+			actualBoards, expectedBoards)
+	}
+}
+
+func TestCheckBoards(t *testing.T) {
+	// Given
+	/*
+		7,4,9,5,11,17,23,2,0,14,21,24,10,16,13,6,15,25,12,22,18,20,8,19,3,26,1
+
+		22 13 17 11  0
+		8  2 23  4 24
+		21  9 14 16  7
+		6 10  3 18  5
+		1 12 20 15 19
+
+		3 15  0  2 22
+		9 18 13 17  5
+		19  8  7 25 23
+		20 11 10 24  4
+		14 21 16 12  6
+
+		14 21 17 24  4
+		10 16 15  9 19
+		18  8 23 26 20
+		22 11 13  6  5
+		2  0 12  3  7
+	*/
+	numbers := []string{"7", "4", "9", "5", "11", "17", "23", "2", "0", "14", "21", "24", "10", "16", "13", "6", "15", "25", "12", "22", "18", "20", "8", "19", "3", "26", "1"}
+	initialBoard1 := Board{content: make([][]int, 5)}
+	initialBoard1.content[0] = []int{22, 13, 17, 11, 0}
+	initialBoard1.content[1] = []int{8, 2, 23, 4, 24}
+	initialBoard1.content[2] = []int{21, 9, 14, 16, 7}
+	initialBoard1.content[3] = []int{6, 10, 3, 18, 5}
+	initialBoard1.content[4] = []int{1, 12, 20, 15, 19}
+	initialBoard2 := Board{content: make([][]int, 5)}
+	initialBoard2.content[0] = []int{3, 15, 0, 2, 22}
+	initialBoard2.content[1] = []int{9, 18, 13, 17, 5}
+	initialBoard2.content[2] = []int{19, 8, 7, 25, 23}
+	initialBoard2.content[3] = []int{20, 11, 10, 24, 4}
+	initialBoard2.content[4] = []int{14, 21, 16, 12, 6}
+	initialBoard3 := Board{content: make([][]int, 5)}
+	initialBoard3.content[0] = []int{14, 21, 17, 24, 4}
+	initialBoard3.content[1] = []int{10, 16, 15, 9, 19}
+	initialBoard3.content[2] = []int{18, 8, 23, 26, 20}
+	initialBoard3.content[3] = []int{22, 11, 13, 6, 5}
+	initialBoard3.content[4] = []int{2, 0, 12, 3, 7}
+	initialBoards := []Board{initialBoard1, initialBoard2, initialBoard3}
+	board1 := Board{content: make([][]int, 5)}
+	board1.content[0] = []int{22, 13, 17, -1, 0}
+	board1.content[1] = []int{8, 2, 23, -1, 24}
+	board1.content[2] = []int{21, -1, 14, 16, -1}
+	board1.content[3] = []int{6, 10, 3, 18, -1}
+	board1.content[4] = []int{1, 12, 20, 15, 19}
+	board2 := Board{content: make([][]int, 5)}
+	board2.content[0] = []int{3, 15, 0, 2, 22}
+	board2.content[1] = []int{-1, 18, 13, 17, -1}
+	board2.content[2] = []int{19, 8, -1, 25, 23}
+	board2.content[3] = []int{20, -1, 10, 24, -1}
+	board2.content[4] = []int{14, 21, 16, 12, 6}
+	board3 := Board{content: make([][]int, 5)}
+	board3.content[0] = []int{14, 21, 17, 24, -1}
+	board3.content[1] = []int{10, 16, 15, -1, 19}
+	board3.content[2] = []int{18, 8, 23, 26, 20}
+	board3.content[3] = []int{22, -1, 13, 6, -1}
+	board3.content[4] = []int{2, 0, 12, 3, -1}
+	expectedBoards := []Board{board1, board2, board3}
+
+	// When
+	var actualBoards []Board = checkBoards(initialBoards, numbers)
 
 	// Then
 	if !reflect.DeepEqual(actualBoards, expectedBoards) {
