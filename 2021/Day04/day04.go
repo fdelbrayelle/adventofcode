@@ -25,11 +25,6 @@ func main() {
 	boards := buildBoards(lines)
 	_, boardId, winningCurrentNumber := markBoards(boards, numbers)
 	unmarkedNumbersSum := getUnmarkedNumbersSum(boards, boardId)
-	fmt.Println("numbers:", numbers)
-	fmt.Println("boards:", boards)
-	fmt.Println("boardId:", boardId)
-	fmt.Println("unmarkedNumbersSum:", unmarkedNumbersSum)
-	fmt.Println("winningCurrentNumber:", winningCurrentNumber)
 	fmt.Println("Part 1 result is:", unmarkedNumbersSum*winningCurrentNumber)
 }
 
@@ -63,23 +58,21 @@ func buildBoards(lines []string) []Board {
 }
 
 func markBoards(boards []Board, numbers []int) ([]Board, int, int) {
-	currentNumber := 0
-	for boardIdx := 0; boardIdx < len(boards); boardIdx++ {
-		for lineIdx, line := range boards[boardIdx].content {
-			for rowIdx, row := range line {
-				for i := 0; i < len(numbers); i++ {
-					if row == numbers[i] {
+	for n := 0; n < len(numbers); n++ {
+		for boardIdx := 0; boardIdx < len(boards); boardIdx++ {
+			for lineIdx := 0; lineIdx < len(boards[boardIdx].content); lineIdx++ {
+				for rowIdx := 0; rowIdx < len(boards[boardIdx].content[lineIdx]); rowIdx++ {
+					if boards[boardIdx].content[lineIdx][rowIdx] == numbers[n] {
 						boards[boardIdx].content[lineIdx][rowIdx] = -1
 					}
-					currentNumber = numbers[i]
+					if checkBoards(boards) {
+						return boards, boardIdx, numbers[n]
+					}
 				}
 			}
 		}
-		if checkBoards(boards) {
-			return boards, boardIdx, currentNumber
-		}
 	}
-	return boards, -1, currentNumber
+	return boards, -1, -1
 }
 
 func checkBoards(boards []Board) bool {

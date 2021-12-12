@@ -52,7 +52,7 @@ func TestBuildBoards(t *testing.T) {
 
 func TestMarkBoards(t *testing.T) {
 	// Given
-	numbers := []int{7, 4, 9, 5, 11, 17, 23, 2, 0, 14, 21, 24}
+	numbers := []int{7, 4, 9, 5, 11, 17, 23, 2, 0, 14, 21, 24, 10, 16, 13, 6, 15, 25, 12, 22, 18, 20, 8, 19, 3, 26, 1}
 	initialBoard1 := Board{content: make([][]int, 5)}
 	initialBoard1.content[0] = []int{22, 13, 17, 11, 0}
 	initialBoard1.content[1] = []int{8, 2, 23, 4, 24}
@@ -114,7 +114,7 @@ func TestMarkBoards(t *testing.T) {
 	}
 }
 
-func TestCheckBoardsInRow(t *testing.T) {
+func TestCheckBoardsInLine(t *testing.T) {
 	// Given
 	board1 := Board{content: make([][]int, 5)}
 	board1.content[0] = []int{22, 13, -1, -1, -1}
@@ -145,7 +145,7 @@ func TestCheckBoardsInRow(t *testing.T) {
 	}
 }
 
-func TestCheckBoardsInLine(t *testing.T) {
+func TestCheckBoardsInRow(t *testing.T) {
 	// Given
 	board1 := Board{content: make([][]int, 5)}
 	board1.content[0] = []int{22, 13, -1, -1, -1}
