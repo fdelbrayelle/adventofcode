@@ -131,7 +131,7 @@ func TestMarkBoardsLastWinner(t *testing.T) {
 	initialBoard3.content[1] = []int{21, 22, 23}
 	initialBoard3.content[2] = []int{24, 25, 26}
 	initialBoards := []Board{initialBoard1, initialBoard2, initialBoard3}
-	board1 := Board{content: make([][]int, 5)}
+	board1 := Board{content: make([][]int, 3)}
 	board1.content[0] = []int{-1, -1, -1}
 	board1.content[1] = []int{3, 4, 5}
 	board1.content[2] = []int{6, 7, 8}
@@ -166,62 +166,36 @@ func TestMarkBoardsLastWinner(t *testing.T) {
 
 func TestCheckBoardsInLine(t *testing.T) {
 	// Given
-	board1 := Board{content: make([][]int, 5)}
-	board1.content[0] = []int{22, 13, -1, -1, -1}
-	board1.content[1] = []int{8, 2, -1, -1, -1}
-	board1.content[2] = []int{-1, -1, -1, 16, -1}
-	board1.content[3] = []int{6, 10, 3, 18, -1}
-	board1.content[4] = []int{1, 12, 20, 15, 19}
-	board2 := Board{content: make([][]int, 5)}
-	board2.content[0] = []int{3, 15, -1, -1, 22}
-	board2.content[1] = []int{-1, 18, 13, -1, -1}
-	board2.content[2] = []int{19, 8, -1, 25, -1}
-	board2.content[3] = []int{20, -1, 10, -1, -1}
-	board2.content[4] = []int{14, -1, 16, 12, 6}
-	board3 := Board{content: make([][]int, 5)}
-	board3.content[0] = []int{-1, -1, -1, -1, -1}
-	board3.content[1] = []int{10, 16, 15, -1, 19}
-	board3.content[2] = []int{18, 8, -1, 26, 20}
-	board3.content[3] = []int{22, -1, 13, 6, -1}
-	board3.content[4] = []int{-1, -1, 12, 3, -1}
-	markedBoards := []Board{board1, board2, board3}
+	board := Board{content: make([][]int, 5)}
+	board.content[0] = []int{-1, -1, -1, -1, -1}
+	board.content[1] = []int{10, 16, 15, -1, 19}
+	board.content[2] = []int{18, 8, -1, 26, 20}
+	board.content[3] = []int{22, -1, 13, 6, -1}
+	board.content[4] = []int{-1, -1, 12, 3, -1}
 
 	// When
-	var actualBoards []Board = checkBoards(markedBoards)
+	actualCheckBoardsResult := checkBoard(board)
 
 	// Then
-	if !actualBoards[2].hasWon {
+	if !actualCheckBoardsResult {
 		t.Errorf("There should have a winner!")
 	}
 }
 
-func TestCheckBoardsInRow(t *testing.T) {
+func TestCheckBoardInRow(t *testing.T) {
 	// Given
-	board1 := Board{content: make([][]int, 5)}
-	board1.content[0] = []int{22, -1, -1, -1, -1}
-	board1.content[1] = []int{8, -1, -1, -1, -1}
-	board1.content[2] = []int{-1, -1, -1, -1, -1}
-	board1.content[3] = []int{6, -1, 3, 18, -1}
-	board1.content[4] = []int{1, 12, 20, 15, 19}
-	board2 := Board{content: make([][]int, 5)}
-	board2.content[0] = []int{3, 15, -1, -1, 22}
-	board2.content[1] = []int{-1, 18, -1, -1, -1}
-	board2.content[2] = []int{19, 8, -1, 25, -1}
-	board2.content[3] = []int{20, -1, -1, -1, -1}
-	board2.content[4] = []int{-1, -1, -1, 12, 6}
-	board3 := Board{content: make([][]int, 5)}
-	board3.content[0] = []int{-1, -1, -1, -1, -1}
-	board3.content[1] = []int{-1, -1, 15, -1, 19}
-	board3.content[2] = []int{18, 8, -1, 26, 20}
-	board3.content[3] = []int{22, -1, -1, 6, -1}
-	board3.content[4] = []int{-1, -1, 12, 3, -1}
-	markedBoards := []Board{board1, board2, board3}
+	board := Board{content: make([][]int, 5)}
+	board.content[0] = []int{3, 15, -1, -1, 22}
+	board.content[1] = []int{-1, 18, -1, -1, -1}
+	board.content[2] = []int{19, 8, -1, 25, -1}
+	board.content[3] = []int{20, -1, -1, -1, -1}
+	board.content[4] = []int{-1, -1, -1, 12, 6}
 
 	// When
-	var actualBoards []Board = checkBoards(markedBoards)
+	actualCheckBoardsResult := checkBoard(board)
 
 	// Then
-	if !actualBoards[1].hasWon {
+	if !actualCheckBoardsResult {
 		t.Errorf("There should have a winner!")
 	}
 }

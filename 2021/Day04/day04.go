@@ -74,29 +74,31 @@ func buildBoards(lines []string) []Board {
 }
 
 func markBoards(boards []Board, numbers []int, firstWinner bool) ([]Board, int, int) {
-	tmpBoardIdx := 0
-	tmpWinningNumber := 0
+	boardIdx := 0
+	winningNumber := 0
 	for n := 0; n < len(numbers); n++ {
-		for boardIdx := 0; boardIdx < len(boards); boardIdx++ {
-			for lineIdx := 0; lineIdx < len(boards[boardIdx].content); lineIdx++ {
-				for rowIdx := 0; rowIdx < len(boards[boardIdx].content[lineIdx]); rowIdx++ {
-					if boards[boardIdx].content[lineIdx][rowIdx] == numbers[n] {
-						boards[boardIdx].content[lineIdx][rowIdx] = -1
-						tmpBoardIdx = boardIdx
-						tmpWinningNumber = numbers[n]
-						boards, checkBoardsResult := checkBoards(boards)
-						if checkBoardsResult && firstWinner {
-							return boards, boardIdx, numbers[n]
-						}
-						if allHasWon(boards) {
-							break
+		for i := 0; i < len(boards); i++ {
+			for lineIdx := 0; lineIdx < len(boards[i].content); lineIdx++ {
+				for rowIdx := 0; rowIdx < len(boards[i].content[lineIdx]); rowIdx++ {
+					if boards[i].content[lineIdx][rowIdx] == numbers[n] {
+						boards[i].content[lineIdx][rowIdx] = -1
+						boardIdx = i
+						winningNumber = numbers[n]
+						if checkBoard(boards[i]) {
+							boards[i].hasWon = true
+							if firstWinner {
+								return boards, i, numbers[n]
+							}
 						}
 					}
 				}
 			}
 		}
+		if allHasWon(boards) {
+			break
+		}
 	}
-	return boards, tmpBoardIdx, tmpWinningNumber
+	return boards, boardIdx, winningNumber
 }
 
 func allHasWon(boards []Board) bool {
@@ -108,30 +110,26 @@ func allHasWon(boards []Board) bool {
 	return true
 }
 
-func checkBoards(boards []Board) ([]Board, bool) {
-	for i := 0; i < len(boards); i++ {
-		marksInLine := make(map[int]int)
-		for _, line := range boards[i].content {
-			marksInRow := 0
-			for rowIdx, row := range line {
-				if row == -1 {
-					marksInRow++
-					marksInLine[rowIdx]++
-				}
-			}
-			if marksInRow == len(line) {
-				boards[i].hasWon = true
-				return boards, true
+func checkBoard(board Board) bool {
+	marksInLine := make(map[int]int)
+	for _, line := range board.content {
+		marksInRow := 0
+		for rowIdx, row := range line {
+			if row == -1 {
+				marksInRow++
+				marksInLine[rowIdx]++
 			}
 		}
-		for _, m := range marksInLine {
-			if m == len(boards[i].content) {
-				boards[i].hasWon = true
-				return boards, true
-			}
+		if marksInRow == len(line) {
+			return true
 		}
 	}
-	return boards, false
+	for _, m := range marksInLine {
+		if m == len(board.content) {
+			return true
+		}
+	}
+	return false
 }
 
 func getUnmarkedNumbersSum(board Board) int {
