@@ -201,7 +201,7 @@ func TestGetUnmarkedNumbersSum(t *testing.T) {
 	expectedUnmarkedNumbersSum := 188
 
 	// When
-	var actualUnmarkedNumbersSum int = getUnmarkedNumbersSum(boards, expectedBoardId)
+	var actualUnmarkedNumbersSum int = getUnmarkedNumbersSum(boards[expectedBoardId])
 
 	// Then
 	if actualUnmarkedNumbersSum != expectedUnmarkedNumbersSum {
