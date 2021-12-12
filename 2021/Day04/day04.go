@@ -23,14 +23,14 @@ func main() {
 		numbers[i], _ = strconv.Atoi(s)
 	}
 	boards := buildBoards(lines)
-	loopGame(boards, numbers)
-}
-
-func loopGame(boards []Board, numbers []int) bool {
-	for i := 0; i < len(numbers); i = i + 5 {
-		markedBoards := markBoards(boards, numbers)
-	}
-	return false
+	_, boardId, winningCurrentNumber := markBoards(boards, numbers)
+	unmarkedNumbersSum := getUnmarkedNumbersSum(boards, boardId)
+	fmt.Println("numbers:", numbers)
+	fmt.Println("boards:", boards)
+	fmt.Println("boardId:", boardId)
+	fmt.Println("unmarkedNumbersSum:", unmarkedNumbersSum)
+	fmt.Println("winningCurrentNumber:", winningCurrentNumber)
+	fmt.Println("Part 1 result is:", unmarkedNumbersSum*winningCurrentNumber)
 }
 
 func buildBoards(lines []string) []Board {
@@ -62,23 +62,24 @@ func buildBoards(lines []string) []Board {
 	return boards
 }
 
-func markBoards(boards []Board, numbers []int) []Board {
-	for i := 0; i < len(boards); i++ {
-		for lineIdx, line := range boards[i].content {
+func markBoards(boards []Board, numbers []int) ([]Board, int, int) {
+	currentNumber := 0
+	for boardIdx := 0; boardIdx < len(boards); boardIdx++ {
+		for lineIdx, line := range boards[boardIdx].content {
 			for rowIdx, row := range line {
-				for _, num := range numbers {
-					// fmt.Println("row:", row)
-					// fmt.Println("num:", num)
-					// fmt.Println("boards[i].content[lineIdx][rowIdx]:", boards[i].content[lineIdx][rowIdx])
-					if row == num {
-						boards[i].content[lineIdx][rowIdx] = -1
+				for i := 0; i < len(numbers); i++ {
+					if row == numbers[i] {
+						boards[boardIdx].content[lineIdx][rowIdx] = -1
 					}
-					// fmt.Println("boards[i].content[lineIdx][rowIdx]:", boards[i].content[lineIdx][rowIdx])
+					currentNumber = numbers[i]
 				}
 			}
 		}
+		if checkBoards(boards) {
+			return boards, boardIdx, currentNumber
+		}
 	}
-	return boards
+	return boards, -1, currentNumber
 }
 
 func checkBoards(boards []Board) bool {
@@ -103,4 +104,16 @@ func checkBoards(boards []Board) bool {
 		}
 	}
 	return false
+}
+
+func getUnmarkedNumbersSum(boards []Board, boardId int) int {
+	sum := 0
+	for _, line := range boards[boardId].content {
+		for _, row := range line {
+			if row != -1 {
+				sum += row
+			}
+		}
+	}
+	return sum
 }
