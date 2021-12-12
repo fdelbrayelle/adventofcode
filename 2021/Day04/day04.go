@@ -84,7 +84,8 @@ func markBoards(boards []Board, numbers []int, firstWinner bool) ([]Board, int, 
 						boards[boardIdx].content[lineIdx][rowIdx] = -1
 						tmpBoardIdx = boardIdx
 						tmpWinningNumber = numbers[n]
-						if checkBoards(boards) && firstWinner {
+						boards, checkBoardsResult := checkBoards(boards)
+						if checkBoardsResult && firstWinner {
 							return boards, boardIdx, numbers[n]
 						}
 						if allHasWon(boards) {
@@ -107,7 +108,7 @@ func allHasWon(boards []Board) bool {
 	return true
 }
 
-func checkBoards(boards []Board) bool {
+func checkBoards(boards []Board) ([]Board, bool) {
 	for i := 0; i < len(boards); i++ {
 		marksInLine := make(map[int]int)
 		for _, line := range boards[i].content {
@@ -120,17 +121,17 @@ func checkBoards(boards []Board) bool {
 			}
 			if marksInRow == len(line) {
 				boards[i].hasWon = true
-				return true
+				return boards, true
 			}
 		}
 		for _, m := range marksInLine {
 			if m == len(boards[i].content) {
 				boards[i].hasWon = true
-				return true
+				return boards, true
 			}
 		}
 	}
-	return false
+	return boards, false
 }
 
 func getUnmarkedNumbersSum(board Board) int {
