@@ -38,9 +38,6 @@ func part2(lines []string, numbers []int) {
 	boards := buildBoards(lines)
 	_, lastWonBoardId, lastWinningNumber := markBoards(boards, numbers, false)
 	unmarkedNumbersSumFromLastBoard := getUnmarkedNumbersSum(boards[lastWonBoardId])
-	fmt.Println("lastWonBoardId:", lastWonBoardId)
-	fmt.Println("lastWinningNumber:", lastWinningNumber)
-	fmt.Println("unmarkedNumbersSumFromLastBoard:", unmarkedNumbersSumFromLastBoard)
 	fmt.Println("Part 2 result is:", unmarkedNumbersSumFromLastBoard*lastWinningNumber)
 }
 
@@ -86,16 +83,13 @@ func markBoards(boards []Board, numbers []int, firstWinner bool) ([]Board, int, 
 						winningNumber = numbers[n]
 						if checkBoard(boards[i]) {
 							boards[i].hasWon = true
-							if firstWinner {
+							if firstWinner || allHasWon(boards) {
 								return boards, i, numbers[n]
 							}
 						}
 					}
 				}
 			}
-		}
-		if allHasWon(boards) {
-			break
 		}
 	}
 	return boards, boardIdx, winningNumber

@@ -117,44 +117,56 @@ func TestMarkBoardsFirstWinner(t *testing.T) {
 
 func TestMarkBoardsLastWinner(t *testing.T) {
 	// Given
-	numbers := []int{0, 1, 2, 9, 10, 11, 18, 19, 20, 21, 22, 23}
-	initialBoard1 := Board{content: make([][]int, 3)}
-	initialBoard1.content[0] = []int{0, 1, 2}
-	initialBoard1.content[1] = []int{3, 4, 5}
-	initialBoard1.content[2] = []int{6, 7, 8}
-	initialBoard2 := Board{content: make([][]int, 3)}
-	initialBoard2.content[0] = []int{9, 10, 11}
-	initialBoard2.content[1] = []int{12, 13, 14}
-	initialBoard2.content[2] = []int{15, 16, 17}
-	initialBoard3 := Board{content: make([][]int, 3)}
-	initialBoard3.content[0] = []int{18, 19, 20}
-	initialBoard3.content[1] = []int{21, 22, 23}
-	initialBoard3.content[2] = []int{24, 25, 26}
+	numbers := []int{7, 4, 9, 5, 11, 17, 23, 2, 0, 14, 21, 24, 10, 16, 13, 6, 15, 25, 12, 22, 18, 20, 8, 19, 3, 26, 1}
+	initialBoard1 := Board{content: make([][]int, 5)}
+	initialBoard1.content[0] = []int{22, 13, 17, 11, 0}
+	initialBoard1.content[1] = []int{8, 2, 23, 4, 24}
+	initialBoard1.content[2] = []int{21, 9, 14, 16, 7}
+	initialBoard1.content[3] = []int{6, 10, 3, 18, 5}
+	initialBoard1.content[4] = []int{1, 12, 20, 15, 19}
+	initialBoard2 := Board{content: make([][]int, 5)}
+	initialBoard2.content[0] = []int{3, 15, 0, 2, 22}
+	initialBoard2.content[1] = []int{9, 18, 13, 17, 5}
+	initialBoard2.content[2] = []int{19, 8, 7, 25, 23}
+	initialBoard2.content[3] = []int{20, 11, 10, 24, 4}
+	initialBoard2.content[4] = []int{14, 21, 16, 12, 6}
+	initialBoard3 := Board{content: make([][]int, 5)}
+	initialBoard3.content[0] = []int{14, 21, 17, 24, 4}
+	initialBoard3.content[1] = []int{10, 16, 15, 9, 19}
+	initialBoard3.content[2] = []int{18, 8, 23, 26, 20}
+	initialBoard3.content[3] = []int{22, 11, 13, 6, 5}
+	initialBoard3.content[4] = []int{2, 0, 12, 3, 7}
 	initialBoards := []Board{initialBoard1, initialBoard2, initialBoard3}
-	board1 := Board{content: make([][]int, 3)}
-	board1.content[0] = []int{-1, -1, -1}
-	board1.content[1] = []int{3, 4, 5}
-	board1.content[2] = []int{6, 7, 8}
+	board1 := Board{content: make([][]int, 5)}
+	board1.content[0] = []int{22, -1, -1, -1, -1}
+	board1.content[1] = []int{8, -1, -1, -1, -1}
+	board1.content[2] = []int{-1, -1, -1, -1, -1}
+	board1.content[3] = []int{6, -1, 3, 18, -1}
+	board1.content[4] = []int{1, 12, 20, 15, 19}
 	board1.hasWon = true
-	board2 := Board{content: make([][]int, 3)}
-	board2.content[0] = []int{-1, -1, -1}
-	board2.content[1] = []int{12, 13, 14}
-	board2.content[2] = []int{15, 16, 17}
+	board2 := Board{content: make([][]int, 5)}
+	board2.content[0] = []int{3, 15, -1, -1, 22}
+	board2.content[1] = []int{-1, 18, -1, -1, -1}
+	board2.content[2] = []int{19, 8, -1, 25, -1}
+	board2.content[3] = []int{20, -1, -1, -1, -1}
+	board2.content[4] = []int{-1, -1, -1, 12, 6}
 	board2.hasWon = true
-	board3 := Board{content: make([][]int, 3)}
-	board3.content[0] = []int{-1, -1, -1}
-	board3.content[1] = []int{21, 22, 23}
-	board3.content[2] = []int{24, 25, 26}
+	board3 := Board{content: make([][]int, 5)}
+	board3.content[0] = []int{-1, -1, -1, -1, -1}
+	board3.content[1] = []int{-1, -1, 15, -1, 19}
+	board3.content[2] = []int{18, 8, -1, 26, 20}
+	board3.content[3] = []int{22, -1, 13, 6, -1}
+	board3.content[4] = []int{-1, -1, 12, 3, -1}
 	board3.hasWon = true
 	expectedBoards := []Board{board1, board2, board3}
-	expectedBoardId := 2
+	expectedBoardId := 1
 
 	// When
 	actualBoards, actualBoardId, _ := markBoards(initialBoards, numbers, false)
 
 	// Then
 	if !reflect.DeepEqual(actualBoards, expectedBoards) {
-		t.Errorf("Boards are different:\nactual  : %#v,\nexpected: %#v",
+		t.Errorf("Boards are different:\nactual  : %v,\nexpected: %v",
 			actualBoards, expectedBoards)
 	}
 
