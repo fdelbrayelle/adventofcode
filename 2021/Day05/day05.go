@@ -21,6 +21,13 @@ func main() {
 		fmt.Println("ioutil.ReadFile Err")
 	}
 	inputLines := strings.Split(string(content), "\n")
+	lines := extractLines(inputLines)
+	diagramMaxSize := findDiagramMaxSize(lines)
+	fmt.Println(diagramMaxSize)
+	// buildDiagram(lines, diagramMaxSize)
+}
+
+func extractLines(inputLines []string) []Line {
 	lines := make([]Line, len(inputLines))
 	for i, inputLine := range inputLines {
 		coords := strings.Split(string(inputLine), " -> ")
@@ -31,9 +38,8 @@ func main() {
 		x2, _ := strconv.Atoi(dstCoords[0])
 		y2, _ := strconv.Atoi(dstCoords[1])
 		lines[i] = Line{src: Coord{x: x1, y: y1}, dst: Coord{x: x2, y: y2}}
-		diagramMaxSize := findDiagramMaxSize(lines)
-		buildDiagram(lines, diagramMaxSize)
 	}
+	return lines
 }
 
 func findDiagramMaxSize(lines []Line) int {
