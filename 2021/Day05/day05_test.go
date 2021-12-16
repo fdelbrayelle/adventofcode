@@ -25,8 +25,7 @@ func TestExtractLines(t *testing.T) {
 
 	// Then
 	if !reflect.DeepEqual(actualLines, expectedLines) {
-		t.Errorf("Lines are different:\nactual  : %v,\nexpected: %v",
-			actualLines, extractLines)
+		t.Errorf("Lines are different")
 	}
 }
 
@@ -112,5 +111,56 @@ func TestFindDiagramMaxSize(t *testing.T) {
 	if actualDiagramMaxSize != expectedDiagramMaxSize {
 		t.Errorf("Diagram max size was incorrect:\nactual  : %d,\nexpected: %d",
 			actualDiagramMaxSize, expectedDiagramMaxSize)
+	}
+}
+
+func TestFindMostDangerousZone(t *testing.T) {
+	// Given
+	expectedDiagram := make([][]int, 10)
+	expectedDiagram[0] = []int{0, 0, 0, 0, 0, 0, 0, 1, 0, 0}
+	expectedDiagram[1] = []int{0, 0, 1, 0, 0, 0, 0, 1, 0, 0}
+	expectedDiagram[2] = []int{0, 0, 1, 0, 0, 0, 0, 1, 0, 0}
+	expectedDiagram[3] = []int{0, 0, 0, 0, 0, 0, 0, 1, 0, 0}
+	expectedDiagram[4] = []int{0, 1, 1, 2, 1, 1, 1, 2, 1, 1}
+	expectedDiagram[5] = []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	expectedDiagram[6] = []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	expectedDiagram[7] = []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	expectedDiagram[8] = []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	expectedDiagram[9] = []int{2, 2, 2, 1, 1, 1, 0, 0, 0, 0}
+	expectedMostDangerousZone := 2
+
+	// When
+	var actualMostDangerousZone = findMostDangerousZone(expectedDiagram)
+
+	// Then
+	if actualMostDangerousZone != expectedMostDangerousZone {
+		t.Errorf("Most dangerous zone was incorrect:\nactual  : %d,\nexpected: %d",
+			actualMostDangerousZone, expectedMostDangerousZone)
+	}
+}
+
+func TestFindNumberMostDangerousZones(t *testing.T) {
+	// Given
+	expectedDiagram := make([][]int, 10)
+	expectedDiagram[0] = []int{0, 0, 0, 0, 0, 0, 0, 1, 0, 0}
+	expectedDiagram[1] = []int{0, 0, 1, 0, 0, 0, 0, 1, 0, 0}
+	expectedDiagram[2] = []int{0, 0, 1, 0, 0, 0, 0, 1, 0, 0}
+	expectedDiagram[3] = []int{0, 0, 0, 0, 0, 0, 0, 1, 0, 0}
+	expectedDiagram[4] = []int{0, 1, 1, 2, 1, 1, 1, 2, 1, 1}
+	expectedDiagram[5] = []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	expectedDiagram[6] = []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	expectedDiagram[7] = []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	expectedDiagram[8] = []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
+	expectedDiagram[9] = []int{2, 2, 2, 1, 1, 1, 0, 0, 0, 0}
+	expectedMostDangerousZone := 2
+	expectedNumberMostDangerousZones := 5
+
+	// When
+	var actualNumberMostDangerousZones = findNumberMostDangerousZones(expectedDiagram, expectedMostDangerousZone)
+
+	// Then
+	if actualNumberMostDangerousZones != expectedNumberMostDangerousZones {
+		t.Errorf("Number of most dangerous zone was incorrect:\nactual  : %d,\nexpected: %d",
+			actualNumberMostDangerousZones, expectedNumberMostDangerousZones)
 	}
 }
