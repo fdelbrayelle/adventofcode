@@ -23,13 +23,8 @@ func main() {
 	inputLines := strings.Split(string(content), "\n")
 	lines := extractLines(inputLines)
 	diagramMaxSize := findDiagramMaxSize(lines)
-	fmt.Println(diagramMaxSize)
 	diagram := buildDiagram(lines, diagramMaxSize)
-	fmt.Println(diagram)
-	mostDangerousZone := findMostDangerousZone(diagram)
-	fmt.Println(mostDangerousZone)
-	numberMostDangerousZones := findNumberMostDangerousZones(diagram, mostDangerousZone)
-	fmt.Println(numberMostDangerousZones)
+	numberMostDangerousZones := findNumberMostDangerousZones(diagram)
 	fmt.Println("Part 1 result is:", numberMostDangerousZones)
 }
 
@@ -112,23 +107,11 @@ func buildDiagram(lines []Line, diagramMaxSize int) [][]int {
 	return diagram
 }
 
-func findMostDangerousZone(diagram [][]int) int {
-	mostDangerousZone := 0
-	for lineIdx := range diagram {
-		for rowIdx := range diagram[lineIdx] {
-			if diagram[lineIdx][rowIdx] > mostDangerousZone {
-				mostDangerousZone = diagram[lineIdx][rowIdx]
-			}
-		}
-	}
-	return mostDangerousZone
-}
-
-func findNumberMostDangerousZones(diagram [][]int, mostDangerousZone int) int {
+func findNumberMostDangerousZones(diagram [][]int) int {
 	numberMostDangerousZones := 0
 	for lineIdx := range diagram {
 		for rowIdx := range diagram[lineIdx] {
-			if diagram[lineIdx][rowIdx] == mostDangerousZone {
+			if diagram[lineIdx][rowIdx] > 1 {
 				numberMostDangerousZones++
 			}
 		}

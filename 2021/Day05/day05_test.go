@@ -114,31 +114,6 @@ func TestFindDiagramMaxSize(t *testing.T) {
 	}
 }
 
-func TestFindMostDangerousZone(t *testing.T) {
-	// Given
-	expectedDiagram := make([][]int, 10)
-	expectedDiagram[0] = []int{0, 0, 0, 0, 0, 0, 0, 1, 0, 0}
-	expectedDiagram[1] = []int{0, 0, 1, 0, 0, 0, 0, 1, 0, 0}
-	expectedDiagram[2] = []int{0, 0, 1, 0, 0, 0, 0, 1, 0, 0}
-	expectedDiagram[3] = []int{0, 0, 0, 0, 0, 0, 0, 1, 0, 0}
-	expectedDiagram[4] = []int{0, 1, 1, 2, 1, 1, 1, 2, 1, 1}
-	expectedDiagram[5] = []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	expectedDiagram[6] = []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	expectedDiagram[7] = []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	expectedDiagram[8] = []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
-	expectedDiagram[9] = []int{2, 2, 2, 1, 1, 1, 0, 0, 0, 0}
-	expectedMostDangerousZone := 2
-
-	// When
-	var actualMostDangerousZone = findMostDangerousZone(expectedDiagram)
-
-	// Then
-	if actualMostDangerousZone != expectedMostDangerousZone {
-		t.Errorf("Most dangerous zone was incorrect:\nactual  : %d,\nexpected: %d",
-			actualMostDangerousZone, expectedMostDangerousZone)
-	}
-}
-
 func TestFindNumberMostDangerousZones(t *testing.T) {
 	// Given
 	expectedDiagram := make([][]int, 10)
@@ -152,11 +127,10 @@ func TestFindNumberMostDangerousZones(t *testing.T) {
 	expectedDiagram[7] = []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	expectedDiagram[8] = []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	expectedDiagram[9] = []int{2, 2, 2, 1, 1, 1, 0, 0, 0, 0}
-	expectedMostDangerousZone := 2
 	expectedNumberMostDangerousZones := 5
 
 	// When
-	var actualNumberMostDangerousZones = findNumberMostDangerousZones(expectedDiagram, expectedMostDangerousZone)
+	var actualNumberMostDangerousZones = findNumberMostDangerousZones(expectedDiagram)
 
 	// Then
 	if actualNumberMostDangerousZones != expectedNumberMostDangerousZones {
