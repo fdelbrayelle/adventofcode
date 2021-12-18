@@ -77,6 +77,54 @@ func TestBuildDiagram(t *testing.T) {
 	}
 }
 
+func TestBuildDiagramWithDiagonalLines(t *testing.T) {
+	// Given
+	/*
+		0,9 -> 5,9
+		8,0 -> 0,8
+		9,4 -> 3,4
+		2,2 -> 2,1
+		7,0 -> 7,4
+		6,4 -> 2,0
+		0,9 -> 2,9
+		3,4 -> 1,4
+		0,0 -> 8,8
+		5,5 -> 8,2
+	*/
+	var lines []Line
+	lines = append(lines, Line{src: Coord{0, 9}, dst: Coord{5, 9}})
+	lines = append(lines, Line{src: Coord{8, 0}, dst: Coord{0, 8}})
+	lines = append(lines, Line{src: Coord{9, 4}, dst: Coord{3, 4}})
+	lines = append(lines, Line{src: Coord{2, 2}, dst: Coord{2, 1}})
+	lines = append(lines, Line{src: Coord{7, 0}, dst: Coord{7, 4}})
+	lines = append(lines, Line{src: Coord{6, 4}, dst: Coord{2, 0}})
+	lines = append(lines, Line{src: Coord{0, 9}, dst: Coord{2, 9}})
+	lines = append(lines, Line{src: Coord{3, 4}, dst: Coord{1, 4}})
+	lines = append(lines, Line{src: Coord{0, 0}, dst: Coord{8, 8}})
+	lines = append(lines, Line{src: Coord{5, 5}, dst: Coord{8, 2}})
+	expectedDiagram := make([][]int, len(lines))
+	expectedDiagram[0] = []int{1, 0, 1, 0, 0, 0, 0, 1, 1, 0}
+	expectedDiagram[1] = []int{0, 1, 1, 1, 0, 0, 0, 2, 0, 0}
+	expectedDiagram[2] = []int{0, 0, 2, 0, 1, 0, 1, 1, 1, 0}
+	expectedDiagram[3] = []int{0, 0, 0, 1, 0, 2, 0, 2, 0, 0}
+	expectedDiagram[4] = []int{0, 1, 1, 2, 3, 1, 3, 2, 1, 1}
+	expectedDiagram[5] = []int{0, 0, 0, 1, 0, 2, 0, 0, 0, 0}
+	expectedDiagram[6] = []int{0, 0, 1, 0, 0, 0, 1, 0, 0, 0}
+	expectedDiagram[7] = []int{0, 1, 0, 0, 0, 0, 0, 1, 0, 0}
+	expectedDiagram[8] = []int{1, 0, 0, 0, 0, 0, 0, 0, 1, 0}
+	expectedDiagram[9] = []int{2, 2, 2, 1, 1, 1, 0, 0, 0, 0}
+	expectedDiagramMaxSize := 10
+
+	// When
+	var actualDiagram = buildDiagramWithDiagonalLines(lines, expectedDiagramMaxSize)
+
+	// Then
+	if !reflect.DeepEqual(actualDiagram, expectedDiagram) {
+		t.Errorf("Diagrams are different:\nactual  : %v,\nexpected: %v",
+			actualDiagram, expectedDiagram)
+	}
+}
+
 func TestFindDiagramMaxSize(t *testing.T) {
 	// Given
 	/*
@@ -128,6 +176,31 @@ func TestFindNumberMostDangerousZones(t *testing.T) {
 	expectedDiagram[8] = []int{0, 0, 0, 0, 0, 0, 0, 0, 0, 0}
 	expectedDiagram[9] = []int{2, 2, 2, 1, 1, 1, 0, 0, 0, 0}
 	expectedNumberMostDangerousZones := 5
+
+	// When
+	var actualNumberMostDangerousZones = findNumberMostDangerousZones(expectedDiagram)
+
+	// Then
+	if actualNumberMostDangerousZones != expectedNumberMostDangerousZones {
+		t.Errorf("Number of most dangerous zone was incorrect:\nactual  : %d,\nexpected: %d",
+			actualNumberMostDangerousZones, expectedNumberMostDangerousZones)
+	}
+}
+
+func TestFindNumberMostDangerousZonesWithDiagonalLines(t *testing.T) {
+	// Given
+	expectedDiagram := make([][]int, 10)
+	expectedDiagram[0] = []int{1, 0, 1, 0, 0, 0, 0, 1, 1, 0}
+	expectedDiagram[1] = []int{0, 1, 1, 1, 0, 0, 0, 2, 0, 0}
+	expectedDiagram[2] = []int{0, 0, 2, 0, 1, 0, 1, 1, 1, 0}
+	expectedDiagram[3] = []int{0, 0, 0, 1, 0, 2, 0, 2, 0, 0}
+	expectedDiagram[4] = []int{0, 1, 1, 2, 3, 1, 3, 2, 1, 1}
+	expectedDiagram[5] = []int{0, 0, 0, 1, 0, 2, 0, 0, 0, 0}
+	expectedDiagram[6] = []int{0, 0, 1, 0, 0, 0, 1, 0, 0, 0}
+	expectedDiagram[7] = []int{0, 1, 0, 0, 0, 0, 0, 1, 0, 0}
+	expectedDiagram[8] = []int{1, 0, 0, 0, 0, 0, 0, 0, 1, 0}
+	expectedDiagram[9] = []int{2, 2, 2, 1, 1, 1, 0, 0, 0, 0}
+	expectedNumberMostDangerousZones := 12
 
 	// When
 	var actualNumberMostDangerousZones = findNumberMostDangerousZones(expectedDiagram)

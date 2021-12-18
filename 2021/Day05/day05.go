@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"math"
 	"strconv"
 	"strings"
 )
@@ -26,6 +27,9 @@ func main() {
 	diagram := buildDiagram(lines, diagramMaxSize)
 	numberMostDangerousZones := findNumberMostDangerousZones(diagram)
 	fmt.Println("Part 1 result is:", numberMostDangerousZones)
+	diagramWithDiagonalLines := buildDiagramWithDiagonalLines(lines, diagramMaxSize)
+	numberMostDangerousZonesWithDiagonalLines := findNumberMostDangerousZones(diagramWithDiagonalLines)
+	fmt.Println("Part 2 result is:", numberMostDangerousZonesWithDiagonalLines)
 }
 
 func extractLines(inputLines []string) []Line {
@@ -99,6 +103,86 @@ func buildDiagram(lines []Line, diagramMaxSize int) [][]int {
 				if yDst == 0 { // xDst < 0 ; yDst = 0 ; 3,2 -> 1,2
 					for i := line.src.x; i >= line.dst.x; i-- {
 						diagram[line.src.y][i]++
+					}
+				}
+			}
+		}
+	}
+	return diagram
+}
+
+func buildDiagramWithDiagonalLines(lines []Line, diagramMaxSize int) [][]int {
+	diagram := make([][]int, diagramMaxSize)
+	for i := 0; i < diagramMaxSize; i++ {
+		diagram[i] = make([]int, diagramMaxSize)
+		for j := 0; j < diagramMaxSize; j++ {
+			diagram[i][j] = 0
+		}
+	}
+	for _, line := range lines {
+		xDst := line.dst.x - line.src.x
+		yDst := line.dst.y - line.src.y
+		if line.src.x == line.dst.x || line.src.y == line.dst.y {
+			if xDst == 0 {
+				if yDst > 0 { // xDst = 0 ; yDst > 0 ; 1,2 -> 1,3
+					for i := line.src.y; i <= line.dst.y; i++ {
+						diagram[i][line.src.x]++
+					}
+				} else if yDst < 0 { // xDst = 0 ; yDst < 0 ; 1,3 -> 1,2
+					for i := line.src.y; i >= line.dst.y; i-- {
+						diagram[i][line.src.x]++
+					}
+				} else { // xDst = 0 ; yDst = 0 ; 1,1 -> 1,1
+					diagram[line.src.y][line.src.x]++
+				}
+			} else if xDst > 0 {
+				if yDst == 0 { // xDst > 0 ; yDst = 0 ; 1,1 -> 3,1
+					for i := line.src.x; i <= line.src.x+xDst; i++ {
+						diagram[line.src.y][i]++
+					}
+				}
+			} else if xDst < 0 {
+				if yDst == 0 { // xDst < 0 ; yDst = 0 ; 3,2 -> 1,2
+					for i := line.src.x; i >= line.dst.x; i-- {
+						diagram[line.src.y][i]++
+					}
+				}
+			}
+		} else if math.Abs(float64(xDst)) == math.Abs(float64(yDst)) {
+			if xDst < 0 {
+				if yDst < 0 { // 6,4 -> 2,0 ; yDst = -4 ; xDst = -4 ; xDst < 0 ; yDst < 0
+					x := line.src.x
+					for y := line.src.y; y >= line.dst.y; y-- {
+						if x != line.dst.x-1 {
+							diagram[y][x]++
+							x--
+						}
+					}
+				} else { // 8,0 -> 0,8 ; yDst = 8 ; xDst = -8 ; xDst < 0 ; yDst > 0
+					y := line.src.y
+					for x := line.src.x; x >= line.dst.x; x-- {
+						if y != line.dst.y+1 {
+							diagram[y][x]++
+							y++
+						}
+					}
+				}
+			} else { // 5,5 -> 8,2 ; yDst = -3 ; xDst = 3 ; xDst > 0 ; yDst < 0
+				if yDst < 0 {
+					y := line.src.y
+					for x := line.src.x; x <= line.dst.x; x++ {
+						if y != line.dst.y-1 {
+							diagram[y][x]++
+							y--
+						}
+					}
+				} else if yDst > 0 { // 0,0 -> 8,8 ; yDst = 8 ; xDst = 8 - xDst > 0 ; yDst < 0
+					y := line.src.y
+					for x := line.src.x; x <= line.dst.x; x++ {
+						if y != line.dst.y+1 {
+							diagram[y][x]++
+							y++
+						}
 					}
 				}
 			}
