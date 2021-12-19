@@ -14,7 +14,9 @@ func main() {
 	}
 	inputLines := strings.Split(string(content), ",")
 	fishes := extractFishes(inputLines)
-	fmt.Println("Part 1 result is:", len(passDays(fishes, 80)))
+	fmt.Println("Part 1 result is:", len(passDaysPart1(fishes, 80)))
+	fishes = extractFishes(inputLines)
+	fmt.Println("Part 2 result is:", passDaysPart2(fishes, 256))
 }
 
 func extractFishes(inputLines []string) []int {
@@ -25,7 +27,7 @@ func extractFishes(inputLines []string) []int {
 	return fishes
 }
 
-func passDays(fishes []int, days int) []int {
+func passDaysPart1(fishes []int, days int) []int {
 	for d := 0; d < days; d++ {
 		babies := 0
 		for f := 0; f < len(fishes); f++ {
@@ -41,4 +43,37 @@ func passDays(fishes []int, days int) []int {
 		}
 	}
 	return fishes
+}
+
+func passDaysPart2(fishes []int, days int) int {
+	calendar := make([]int, 9)
+	for i := 0; i < len(calendar); i++ {
+		calendar[i] = 0
+	}
+	for f := 0; f < len(fishes); f++ {
+		calendar[fishes[f]]++
+	}
+
+	for d := 0; d < days; d++ {
+		add6number, add8number := 0, 0
+		for i := 0; i < len(calendar); i++ {
+			if calendar[i] > 0 {
+				if i == 0 {
+					add6number += calendar[i]
+					add8number += calendar[i]
+				} else if i > 0 {
+					calendar[i-1] += calendar[i]
+				}
+				calendar[i] = 0
+			}
+		}
+		calendar[6] += add6number
+		calendar[8] += add8number
+	}
+
+	sum := 0
+	for i := 0; i < len(calendar); i++ {
+		sum += calendar[i]
+	}
+	return sum
 }

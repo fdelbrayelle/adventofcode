@@ -61,3 +61,15 @@ Find a way to simulate lanternfish. **How many lanternfish would there be after 
 Your puzzle answer was `379414`.
 
 **The first half of this puzzle is complete! It provides one gold star: ⭐**
+
+## --- Part Two ---
+
+Suppose the lanternfish live forever and have unlimited food and space. Would they take over the entire ocean?
+
+After 256 days in the example above, there would be a total of `26984457539` lanternfish!
+
+**How many lanternfish would there be after 256 days?**
+
+Your puzzle answer was `1705008653296`.
+
+**Both parts of this puzzle are complete! They provide two gold stars: ⭐⭐**
