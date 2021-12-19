@@ -16,6 +16,9 @@ func main() {
 	inputLines := strings.Split(string(content), ",")
 	horizontalPositions := extractHorizontalPositions(inputLines)
 	fmt.Println("Part 1 result is:", getCheapestTotalFuelCost(horizontalPositions))
+	horizontalPositions = extractHorizontalPositions(inputLines)
+	cheapestTotalFuelCostPart2, _ := getCheapestTotalFuelCostPart2(horizontalPositions)
+	fmt.Println("Part 2 result is:", cheapestTotalFuelCostPart2)
 }
 
 func extractHorizontalPositions(inputLines []string) []int {
@@ -38,4 +41,38 @@ func getCheapestTotalFuelCost(horizontalPositions []int) float64 {
 		}
 	}
 	return cheapestTotalFuelCost
+}
+
+func getCheapestTotalFuelCostPart2(horizontalPositions []int) (int, int) {
+	cheapestTotalFuelCost := 0
+	bestPosition := 0
+	for i := 0; i < len(horizontalPositions); i++ {
+		totalFuelCost := 0
+		for j := 0; j < len(horizontalPositions); j++ {
+			totalFuelCost += getTotalFuelCostFromPositionToAnother(i, horizontalPositions[j])
+		}
+		if i == 0 || totalFuelCost < cheapestTotalFuelCost {
+			cheapestTotalFuelCost = totalFuelCost
+			bestPosition = i
+		}
+	}
+	return cheapestTotalFuelCost, bestPosition
+}
+
+func getTotalFuelCostFromPositionToAnother(src int, dst int) int {
+	totalFuelCost := 0
+	if src < dst {
+		moveCost := 1
+		for i := src; i < dst; i++ {
+			totalFuelCost += moveCost
+			moveCost++
+		}
+	} else if src > dst {
+		moveCost := 1
+		for i := src; i > dst; i-- {
+			totalFuelCost += moveCost
+			moveCost++
+		}
+	}
+	return totalFuelCost
 }
