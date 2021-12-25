@@ -15,8 +15,9 @@ func main() {
 		fmt.Println("ioutil.ReadFile Err")
 	}
 	inputLines := strings.Split(string(content), "\n")
-	_, outputValues := getValues(inputLines)
+	inputValues, outputValues := getValues(inputLines)
 	fmt.Println("Part 1 result is:", getDigitCount(outputValues, 1)+getDigitCount(outputValues, 4)+getDigitCount(outputValues, 7)+getDigitCount(outputValues, 8))
+	fmt.Println("Part 2 result is:", decodeLines(inputValues, outputValues))
 }
 
 func getValues(inputLines []string) ([]string, []string) {
@@ -24,8 +25,8 @@ func getValues(inputLines []string) ([]string, []string) {
 	outputValues := make([]string, len(inputLines)-1)
 	for i := 0; i < len(inputLines); i++ {
 		values := strings.Split(string(inputLines[i]), " | ")
-		if i != len(inputLines)-1 {
-			inputLines[i] = values[0]
+		if len(values) == 2 {
+			inputValues[i] = values[0]
 			outputValues[i] = values[1]
 		}
 	}
@@ -81,47 +82,84 @@ func getDigitCount(outputLines []string, digit int) int {
 	return count
 }
 
-/*
- dddd
-e    a
-e    a
- ffff
-g    b
-g    b
- cccc
-*/
-
-func getDigitsLettersPart2() map[int][]string {
+func findDigitsLetters(inputLine string) map[int][]string {
 	digits := make(map[int][]string, 10)
-	digits[0] = []string{"a", "b", "c", "d", "e", "g"}      // 6
-	digits[1] = []string{"a", "b"}                          // 2 OK
-	digits[2] = []string{"a", "c", "d", "f", "g"}           // 5
-	digits[3] = []string{"a", "b", "c", "d", "f"}           // 5
-	digits[4] = []string{"a", "b", "e", "f"}                // 4 OK
-	digits[5] = []string{"b", "c", "d", "e", "f"}           // 5
-	digits[6] = []string{"b", "c", "d", "e", "f", "g"}      // 6
-	digits[7] = []string{"a", "b", "d"}                     // 3 OK
-	digits[8] = []string{"a", "b", "c", "d", "e", "f", "g"} // 7 OK
-	digits[9] = []string{"a", "b", "c", "d", "e", "f"}      // 6
+	numbers := strings.Split(string(inputLine), " ")
+	sort.Slice(numbers, func(i, j int) bool {
+		return len(numbers[i]) < len(numbers[j])
+	})
+	for _, number := range numbers {
+		numberLetters := strings.Split(string(number), "")
+		switch len(numberLetters) {
+		case 2:
+			digits[1] = []string{string(numberLetters[0]), string(numberLetters[1])}
+		case 3:
+			digits[7] = []string{string(numberLetters[0]), string(numberLetters[1]), string(numberLetters[2])}
+		case 4:
+			digits[4] = []string{string(numberLetters[0]), string(numberLetters[1]), string(numberLetters[2]), string(numberLetters[3])}
+		case 5:
+			digitsContent := []string{string(numberLetters[0]), string(numberLetters[1]), string(numberLetters[2]), string(numberLetters[3]), string(numberLetters[4])}
+			if containsNTimesDigitLetter(numberLetters, digits[7], 3) {
+				digits[3] = digitsContent
+			} else if containsNTimesDigitLetter(numberLetters, digits[4], 3) {
+				digits[5] = digitsContent
+			} else if containsNTimesDigitLetter(numberLetters, digits[7], 2) {
+				digits[2] = digitsContent
+			}
+		case 6:
+			digitsContent := []string{string(numberLetters[0]), string(numberLetters[1]), string(numberLetters[2]), string(numberLetters[3]), string(numberLetters[4]), string(numberLetters[5])}
+			if containsNTimesDigitLetter(numberLetters, digits[3], 5) {
+				digits[9] = digitsContent
+			} else if containsNTimesDigitLetter(numberLetters, digits[5], 5) {
+				digits[6] = digitsContent
+			} else {
+				digits[0] = digitsContent
+			}
+		case 7:
+			digits[8] = []string{string(numberLetters[0]), string(numberLetters[1]), string(numberLetters[2]), string(numberLetters[3]), string(numberLetters[4]), string(numberLetters[5]), string(numberLetters[6])}
+		}
+	}
+	for _, digit := range digits {
+		sort.Slice(digit, func(i, j int) bool {
+			return digit[i] < digit[j]
+		})
+	}
 	return digits
 }
 
-func decodeLine(outputLine string) (int, error) {
+func containsNTimesDigitLetter(numberLetters []string, digits []string, expectedCount int) bool {
+	count := 0
+	for _, digit := range digits {
+		for _, numberLetter := range numberLetters {
+			if digit == numberLetter {
+				count++
+			}
+		}
+	}
+	return count == expectedCount
+}
+
+func decodeLine(inputLine string, outputLine string) (int, error) {
 	result := ""
 	numbers := strings.Split(string(outputLine), " ")
+	digitsLetters := findDigitsLetters(inputLine)
 	for _, number := range numbers {
 		for i := 0; i <= 9; i++ {
-			digitLetters := getDigitsLettersPart1()[i]
+			digitLetters := digitsLetters[i]
 			if len(number) == len(digitLetters) {
-				numberLetters := strings.Split(string(number), "")
-				sort.Slice(numberLetters, func(i, j int) bool {
-					return numberLetters[i] < numberLetters[j]
-				})
-				sort.Slice(digitLetters, func(i, j int) bool {
-					return digitLetters[i] < digitLetters[j]
-				})
-				if reflect.DeepEqual(numberLetters, digitLetters) {
+				if i == 1 || i == 4 || i == 7 || i == 8 {
 					result += strconv.Itoa(i)
+				} else {
+					numberLetters := strings.Split(string(number), "")
+					sort.Slice(numberLetters, func(i, j int) bool {
+						return numberLetters[i] < numberLetters[j]
+					})
+					sort.Slice(digitLetters, func(i, j int) bool {
+						return digitLetters[i] < digitLetters[j]
+					})
+					if reflect.DeepEqual(numberLetters, digitLetters) {
+						result += strconv.Itoa(i)
+					}
 				}
 			}
 		}
@@ -129,10 +167,10 @@ func decodeLine(outputLine string) (int, error) {
 	return strconv.Atoi(result)
 }
 
-func decodeLines(outputLines []string) int {
+func decodeLines(inputLines []string, outputLines []string) int {
 	sum := 0
-	for _, outputLine := range outputLines {
-		result, _ := decodeLine(outputLine)
+	for idx := range inputLines {
+		result, _ := decodeLine(inputLines[idx], outputLines[idx])
 		sum += result
 	}
 	return sum
